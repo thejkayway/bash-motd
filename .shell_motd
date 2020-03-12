@@ -1,0 +1,34 @@
+HOUR=$(date +"%H")
+COLUMNS=$(tput cols) 
+PROMPT_LEN=16
+
+if [[ ${HOUR#0} -le 11 ]]; then
+  TIME_OF_DAY="𝓶 𝓸 𝓻 𝓷 𝓲 𝓷 𝓰"
+  let PROMPT_LEN+=13
+fi
+if [[ ${HOUR#0} -ge 12 ]]  && [[ $HOUR -le 17 ]]; then
+  TIME_OF_DAY="𝓪 𝓯 𝓽 𝓮 𝓻 𝓷 𝓸 𝓸 𝓷"
+  let PROMPT_LEN+=17
+fi
+if [[ ${HOUR#0} -ge 18 ]]; then
+  TIME_OF_DAY="𝓮 𝓿 𝓮 𝓷 𝓲 𝓷 𝓰"
+  let PROMPT_LEN+=13
+fi
+
+CHARS=(¸ , ø ¤ º ° \` ° º ¤ ø , ¸)
+
+GREETING="   𝓰 𝓸 𝓸 𝓭   $TIME_OF_DAY   "
+
+let BANNER_LEN=$((($COLUMNS - $PROMPT_LEN) / 2 - 1))
+
+for i in $(seq 0 $BANNER_LEN); do
+  printf ${CHARS[$i % 13 + 1]}
+done
+printf "$GREETING"
+for i in $(seq 0 $BANNER_LEN); do
+  printf ${CHARS[$i % 13 + 1]}
+  if [[ $i -eq $BANNER_LEN ]] && (($(($COLUMNS - $PROMPT_LEN)) % 2)); then
+    printf ${CHARS[($i+1) % 13 + 1]}
+  fi
+done
+printf "\n\n"
